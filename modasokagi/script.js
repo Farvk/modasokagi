@@ -108,7 +108,7 @@ function showScreen(screenId) {
 function selectRandomTheme() {
     const randomIndex = Math.floor(Math.random() * themes.length);
     state.currentTheme = themes[randomIndex];
-    document.getElementById('currentThemeDisplay').textContent = state.currentTheme.name;
+    document.getElementById('current-theme-display').textContent = state.currentTheme.name;
     document.getElementById('podium-theme-display').textContent = state.currentTheme.name;
 }
 
@@ -209,6 +209,16 @@ function renderWardrobe() {
 
 // --- ACTIONS ---
 
+function showToast(message, type = 'success') {
+    const toast = document.createElement('div');
+    toast.className = `toast toast-${type}`;
+    toast.textContent = message;
+    document.body.appendChild(toast);
+    setTimeout(() => {
+        toast.remove();
+    }, 3000);
+}
+
 function buyItem(id) {
     const item = items.find(i => i.id === id);
     if (state.budget >= item.price && !state.inventory.includes(id)) {
@@ -216,6 +226,9 @@ function buyItem(id) {
         state.inventory.push(id);
         updateBudgetDisplay();
         renderShop();
+        showToast('Eşya satın alındı!', 'success');
+    } else if (state.budget < item.price) {
+        showToast('Yetersiz bakiye!', 'error');
     }
 }
 
@@ -272,6 +285,9 @@ function simulateBotShopping(bot) {
     const categories = ["Saç", "Elbise", "Ayakkabı"];
     categories.forEach(cat => {
         if(!bot.equipped[cat]) {
+            if (cat === 'Elbise' && (bot.equipped['T-shirt'] || bot.equipped['Pantolon'] || bot.equipped['Etek'])) {
+                return;
+            }
             const avail = items.filter(i => i.category === cat && i.price <= tempBudget);
             if(avail.length > 0) {
                 const pick = avail[Math.floor(Math.random() * avail.length)];
