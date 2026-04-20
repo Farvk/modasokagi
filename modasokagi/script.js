@@ -34,7 +34,12 @@ const items = [
     { id: 23, name: "Siyah Gözlük", category: "Takı/Aksesuar", price: 150, tags: ["Yaz Partisi", "Sokak Modası"], cssClass: "c-gunes-gozlugu" },
     { id: 24, name: "Doğum Günü Şapkası", category: "Takı/Aksesuar", price: 50, tags: ["Doğum Günü Partisi"], cssClass: "c-parti-sapkasi" },
     { id: 25, name: "Uyku Bandı", category: "Takı/Aksesuar", price: 80, tags: ["Evde Pijama Partisi"], cssClass: "c-uyku-bandi" },
-    { id: 26, name: "Kırmızı Kulaklık", category: "Takı/Aksesuar", price: 250, tags: ["Konser", "Sokak Modası"], cssClass: "c-kulaklik" }
+    { id: 26, name: "Kırmızı Kulaklık", category: "Takı/Aksesuar", price: 250, tags: ["Konser", "Sokak Modası"], cssClass: "c-kulaklik" },
+    { id: 27, name: "Neon Yeşil Crop", category: "T-shirt", price: 220, tags: ["Konser", "Sokak Modası"], cssClass: "c-neon-crop" },
+    { id: 28, name: "Geniş Paça Kumaş", category: "Pantolon", price: 300, tags: ["Balo", "Yılbaşı Yemeği"], cssClass: "c-genis-paca" },
+    { id: 29, name: "Şık Şapka", category: "Takı/Aksesuar", price: 180, tags: ["Yaz Partisi", "Sokak Modası"], cssClass: "c-sik-sapka" },
+    { id: 30, name: "Uzun Gelinlik", category: "Elbise", price: 800, tags: ["Balo"], cssClass: "c-gelinlik" },
+    { id: 31, name: "Çizme", category: "Ayakkabı", price: 350, tags: ["Konser", "Sokak Modası"], cssClass: "c-cizme" }
 ];
 
 let state = {
@@ -73,27 +78,37 @@ function generateMannequinSVG(equippedState, idPrefix = 'm') {
                 <stop offset="100%" stop-color="#f87171" />
             </linearGradient>
         </defs>
-        <!-- Body Base -->
-        <path d="M40 30 Q50 40 60 30 L65 60 L55 90 L60 140 L50 140 L50 90 L40 140 L30 140 L35 90 L25 60 Z" fill="url(#skin)" />
+        <!-- Realistic Body Base (Chest, Waist, Hips) -->
+        <path d="M44 32 C 48 32, 52 32, 56 32 C 61 35, 62 45, 59 55 C 57 62, 53 66, 61 85 C 66 98, 62 140, 56 140 L50 140 L50 92 C 40 100, 34 98, 39 85 C 47 66, 43 62, 41 55 C 38 45, 39 35, 44 32 Z" fill="url(#skin)" />
+        <path d="M39 38 Q 30 55 25 75 Q 20 90 28 85 Q 34 70 41 55 Z" fill="url(#skin)" /> <!-- Left Arm -->
+        <path d="M61 38 Q 70 55 75 75 Q 80 90 72 85 Q 66 70 59 55 Z" fill="url(#skin)" /> <!-- Right Arm -->
+        <!-- Neck -->
+        <rect x="47" y="28" width="6" height="8" fill="url(#skin)" />
         <!-- Head -->
-        <circle cx="50" cy="20" r="12" fill="url(#skin)" />
-        <!-- Default Face -->
-        <path d="M46 18 Q48 20 50 18 M54 18 Q56 20 58 18" stroke="#000" fill="transparent" />
-        <path d="M48 25 Q50 27 52 25" stroke="#db2777" fill="transparent" stroke-width="1.5" />
-        
+        <ellipse cx="50" cy="18" rx="11" ry="14" fill="url(#skin)" />
+
         <!-- Dynamic Layers based on CSS classes -->
         <!-- Hair layer -->
         <path class="hair" d="M38 10 Q50 0 62 10 Q65 25 50 25 Q35 25 38 10 Z" fill="#4b5563" />
-        
+
+        <!-- Default Face (More realistic eyes and mouth, drawn over hair) -->
+        <path d="M44 16 Q46 14 48 16 Q46 17 44 16" fill="#fff" stroke="#000" stroke-width="0.5" /> <!-- Left Eye -->
+        <circle cx="46" cy="15.8" r="1" fill="#000" />
+        <path d="M52 16 Q54 14 56 16 Q54 17 52 16" fill="#fff" stroke="#000" stroke-width="0.5" /> <!-- Right Eye -->
+        <circle cx="54" cy="15.8" r="1" fill="#000" />
+        <path d="M47 22 Q50 25 53 22 Q50 23 47 22 Z" fill="#db2777" /> <!-- Lips -->
+        <!-- Nose hint -->
+        <path d="M49.5 17 L49.5 19 L50.5 19" stroke="#b91c1c" fill="transparent" stroke-width="0.5" />
+
         <!-- Clothes layers (Top/Dress) -->
-        <path class="top" d="M35 35 L65 35 L60 60 L40 60 Z" fill="#e5e7eb" />
-        
+        <path class="top" d="M39 35 C 44 32, 56 32, 61 35 L59 55 L41 55 Z" fill="#e5e7eb" />
+
         <!-- Bottom layer (Pants/Skirt) -->
-        <path class="bottom" d="M40 60 L60 60 L65 95 L35 95 Z" fill="transparent" />
-        
+        <path class="bottom" d="M41 55 L59 55 C 62 65, 60 90, 62 140 L50 140 L50 90 L50 140 L38 140 C 40 90, 38 65, 41 55 Z" fill="transparent" />
+
         <!-- Shoes layer -->
         <path class="shoes" d="M30 135 L40 135 L40 140 L30 140 Z M50 135 L60 135 L60 140 L50 140 Z" fill="#9ca3af" />
-        
+
         <!-- Accessory layer -->
         <path class="acc" d="" fill="transparent" />
     </svg>
@@ -116,24 +131,53 @@ function selectRandomTheme() {
 
 function updateBudgetDisplay() {
     document.getElementById('shop-budget').textContent = state.budget;
+    const streetBudget = document.getElementById('street-budget');
+    if(streetBudget) streetBudget.textContent = state.budget;
 }
 
-function renderShop() {
+function goToBuilding(buildingName) {
+    if (buildingName === 'Ev') {
+        renderWardrobe();
+        showScreen('screen-wardrobe');
+    } else if (buildingName === 'Yarışma Salonu') {
+        setupPodium();
+        document.getElementById('btn-judge').style.display = 'inline-block';
+        document.getElementById('live-scorecards').classList.add('hidden');
+        showScreen('screen-podium');
+    } else {
+        // Shop types
+        const shopTitle = document.getElementById('shop-title');
+        if(shopTitle) shopTitle.textContent = buildingName;
+        let categoriesToShow = [];
+        if(buildingName === 'Kıyafet Dükkanı') categoriesToShow = ['Elbise', 'T-shirt', 'Pantolon', 'Etek'];
+        if(buildingName === 'Aksesuarcı') categoriesToShow = ['Takı/Aksesuar'];
+        if(buildingName === 'Kuaför') categoriesToShow = ['Saç'];
+        if(buildingName === 'Ayakkabıcı') categoriesToShow = ['Ayakkabı'];
+
+        renderShop(categoriesToShow);
+        showScreen('screen-shop');
+    }
+}
+window.goToBuilding = goToBuilding;
+
+function renderShop(categoriesToShow = null) {
     const grid = document.getElementById('shop-items');
     grid.innerHTML = '';
-    
+
     let filtered = items;
-    if (state.currentCategory !== 'Tümü') {
+    if (categoriesToShow && categoriesToShow.length > 0) {
+        filtered = items.filter(i => categoriesToShow.includes(i.category));
+    } else if (state.currentCategory !== 'Tümü') {
         filtered = items.filter(i => i.category === state.currentCategory);
     }
 
     filtered.forEach(item => {
         const isOwned = state.inventory.includes(item.id);
         const canAfford = state.budget >= item.price;
-        
+
         const card = document.createElement('div');
         card.className = 'item-card shop-item';
-        
+
         // Mini preview of the item
         let fakeEquip = {}; fakeEquip[item.category] = item.id;
         const miniSvg = generateMannequinSVG(fakeEquip, `mini-${item.id}`);
@@ -142,7 +186,7 @@ function renderShop() {
             <div class="svg-icon-container">${miniSvg}</div>
             <div class="item-name">${item.name}</div>
             <div class="item-price">💎 ${item.price} TL</div>
-            <button class="btn-action btn-buy" 
+            <button class="btn-action btn-buy"
                 ${isOwned ? 'disabled' : (canAfford ? '' : 'disabled')}
                 onclick="buyItem(${item.id})">
                 ${isOwned ? 'SAHİPSİN' : 'SATIN AL'}
@@ -156,7 +200,7 @@ function renderCategories() {
     const cats = ['Tümü', ...new Set(items.map(i => i.category))];
     const container = document.getElementById('shop-categories');
     container.innerHTML = '';
-    
+
     cats.forEach(cat => {
         const btn = document.createElement('button');
         btn.className = `filter-btn ${state.currentCategory === cat ? 'active' : ''}`;
@@ -170,34 +214,62 @@ function renderCategories() {
     });
 }
 
+let currentWardrobeCategory = 'Tümü';
+
 function renderWardrobe() {
     // Update Mannequin
     document.getElementById('wardrobe-character-container').innerHTML = generateMannequinSVG(state.equipped, 'wardrobe-mannequin');
-    
+
+    // Render Categories
+    const myItemsTotal = items.filter(i => state.inventory.includes(i.id));
+    const cats = ['Tümü', ...new Set(myItemsTotal.map(i => i.category))];
+    const catContainer = document.getElementById('inventory-categories');
+    if (catContainer) {
+        catContainer.innerHTML = '';
+        cats.forEach(cat => {
+            const btn = document.createElement('button');
+            btn.className = `filter-btn ${currentWardrobeCategory === cat ? 'active' : ''}`;
+            btn.textContent = cat;
+            btn.onclick = () => {
+                currentWardrobeCategory = cat;
+                renderWardrobe();
+            };
+            catContainer.appendChild(btn);
+        });
+    }
+
     // Render Inventory Items
     const grid = document.getElementById('inventory-items');
     grid.innerHTML = '';
-    
-    const myItems = items.filter(i => state.inventory.includes(i.id));
-    
+
+    let myItems = myItemsTotal;
+    if (currentWardrobeCategory !== 'Tümü') {
+        myItems = myItems.filter(i => i.category === currentWardrobeCategory);
+    }
+
+    if(myItemsTotal.length === 0) {
+        grid.innerHTML = '<p style="grid-column: 1/-1; text-align:center; color: var(--text-muted);">Henüz hiç eşyan yok. Sokağa çıkıp dükkanları gez!</p>';
+        return;
+    }
+
     if(myItems.length === 0) {
-        grid.innerHTML = '<p style="grid-column: 1/-1; text-align:center; color: var(--text-muted);">Henüz hiç eşyan yok. Boutique\'e git!</p>';
+        grid.innerHTML = '<p style="grid-column: 1/-1; text-align:center; color: var(--text-muted);">Bu kategoride eşyan yok.</p>';
         return;
     }
 
     myItems.forEach(item => {
         const isEquipped = state.equipped[item.category] === item.id;
-        
+
         const card = document.createElement('div');
         card.className = 'item-card inventory-item';
-        
+
         let fakeEquip = {}; fakeEquip[item.category] = item.id;
         const miniSvg = generateMannequinSVG(fakeEquip, `inv-${item.id}`);
 
         card.innerHTML = `
             <div class="svg-icon-container">${miniSvg}</div>
             <div class="item-name">${item.name}</div>
-            <button class="btn-action btn-wear ${isEquipped ? 'active-wear' : ''}" 
+            <button class="btn-action btn-wear ${isEquipped ? 'active-wear' : ''}"
                 onclick="toggleEquip(${item.id})"
                 style="${isEquipped ? 'background:var(--primary); color:white;' : ''}">
                 ${isEquipped ? 'ÇIKAR' : 'GİY'}
@@ -261,7 +333,7 @@ function simulateBotShopping(bot) {
     bot.inventory = [];
     bot.equipped = { Saç: null, Elbise: null, 'T-shirt': null, Pantolon: null, Etek: null, Ayakkabı: null, 'Takı/Aksesuar': null };
     let tempBudget = bot.budget;
-    
+
     // Bots try to buy items matching the theme
     let matchingItems = items.filter(i => i.tags.includes(state.currentTheme.name));
     // Shuffle
@@ -305,15 +377,14 @@ function calculateScore(equippedObj, themeName) {
         if(itemId) {
             const item = items.find(i => i.id === itemId);
             if(item && item.tags.includes(themeName)) {
-                score += 30; // Theme match bonus
+                score += 2; // Theme match bonus
             } else {
-                score += 10; // Base item score
+                score += 1; // Base item score
             }
         }
     });
-    // Add random factor for excitement (0-15)
-    score += Math.floor(Math.random() * 16);
-    return Math.min(score, 100); // Max 100
+    score += Math.random() * 2;
+    return Math.min(Math.round(score * 10) / 10, 10); // Max 10.0
 }
 
 // --- PODIUM & JUDGING ANIMATIONS ---
@@ -321,10 +392,10 @@ function calculateScore(equippedObj, themeName) {
 function setupPodium() {
     const container = document.getElementById('podium-contestants');
     container.innerHTML = '';
-    
+
     // Add Player
     container.appendChild(createContestantEl(state.playerName, 'podium-player', state.equipped));
-    
+
     // Add Bots
     bots.forEach((bot, index) => {
         simulateBotShopping(bot);
@@ -345,9 +416,10 @@ function createContestantEl(name, idPrefix, equippedState) {
 }
 
 async function startJudgingSequence() {
+    document.querySelectorAll('.contestant').forEach(c => c.classList.add('walk-in'));
     const btn = document.getElementById('btn-judge');
     btn.style.display = 'none';
-    
+
     document.getElementById('screen-podium').classList.add('dim-background');
     document.getElementById('spotlight-layer').classList.remove('hidden');
 
@@ -378,16 +450,17 @@ async function startJudgingSequence() {
         card.className = 'score-card';
         card.innerHTML = `<img src="${judges[j].avatar}" style="width:30px; border-radius:50%; vertical-align:middle; margin-right:10px;"> ${judges[j].name} Puanlıyor...`;
         scoreboards.appendChild(card);
-        
+
         await sleep(1200);
         // Distribute portions of the final score to simulate judges
-        card.innerHTML = `<img src="${judges[j].avatar}" style="width:30px; border-radius:50%; vertical-align:middle; margin-right:10px;"> ${judges[j].name}: EVET!`;
+        const judgeScore = (Math.random() * 3 + 6).toFixed(1);
+        card.innerHTML = `<img src="${judges[j].avatar}" style="width:30px; border-radius:50%; vertical-align:middle; margin-right:10px;"> ${judges[j].name}: ${judgeScore}/10`;
     }
 
     await sleep(1500);
     document.getElementById('spotlight-layer').classList.add('hidden');
     document.getElementById('screen-podium').classList.remove('dim-background');
-    
+
     showResults(contestants);
 }
 
@@ -397,7 +470,7 @@ function sleep(ms) {
 
 function showResults(contestants) {
     showScreen('screen-results');
-    
+
     // Sort descending
     contestants.sort((a,b) => b.score - a.score);
     const winner = contestants[0];
@@ -409,7 +482,7 @@ function showResults(contestants) {
             ${generateMannequinSVG(winner.state, 'winner-svg')}
         </div>
         <h3>${winner.isPlayer ? 'Tebrikler!' : 'Kazanan:'} ${winner.name} 👑</h3>
-        <p style="color:var(--text-muted); margin-top:10px;">Puan: ${winner.score}</p>
+        <p style="color:var(--text-muted); margin-top:10px;">Puan: ${winner.score}/10</p>
     `;
 
     // Leaderboard
@@ -423,7 +496,7 @@ function showResults(contestants) {
                 <span style="display:inline-block; width:30px; color:var(--text-muted)">#${index+1}</span>
                 <span>${c.name}</span>
             </div>
-            <div class="score-num">${c.score} Puan</div>
+            <div class="score-num">${c.score} / 10 Puan</div>
         `;
         lb.appendChild(row);
     });
@@ -438,7 +511,7 @@ function fireConfetti() {
     const container = document.getElementById('confetti-container');
     container.innerHTML = '';
     const colors = ['#ff007f', '#00f2fe', '#ffd700', '#ffffff'];
-    
+
     for(let i=0; i<100; i++) {
         const conf = document.createElement('div');
         conf.className = 'confetti';
@@ -448,7 +521,7 @@ function fireConfetti() {
         conf.style.animationDelay = (Math.random() * 2) + 's';
         container.appendChild(conf);
     }
-    
+
     setTimeout(() => { container.innerHTML = ''; }, 5000);
 }
 
@@ -464,24 +537,6 @@ document.addEventListener('DOMContentLoaded', () => {
         selectRandomTheme();
         document.getElementById('current-theme-display').textContent = state.currentTheme.name;
         showScreen('screen-theme');
-    });
-
-    document.getElementById('btn-go-shop').addEventListener('click', () => {
-        updateBudgetDisplay();
-        renderCategories();
-        renderShop();
-        showScreen('screen-shop');
-    });
-
-    document.getElementById('btn-go-wardrobe').addEventListener('click', () => {
-        renderWardrobe();
-        showScreen('screen-wardrobe');
-    });
-
-    document.getElementById('btn-back-shop').addEventListener('click', () => {
-        updateBudgetDisplay();
-        renderShop();
-        showScreen('screen-shop');
     });
 
     document.getElementById('btn-go-podium').addEventListener('click', () => {
