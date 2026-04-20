@@ -20,7 +20,7 @@
         <section id="screen-create-character" class="screen active">
             <h1 class="glam-title">FASHION STAR</h1>
             <p class="subtitle">Moda ikonunu yarat!</p>
-            
+
             <div class="character-preview" id="initial-character-preview">
                 <!-- SVG injected via JS -->
             </div>
@@ -50,18 +50,54 @@
                 <div class="theme-badge">TEMA</div>
                 <h3 id="current-theme-display" class="theme-text">...</h3>
             </div>
-            <button id="btn-go-shop" class="btn-glam">Boutique'e Git</button>
+            <button id="btn-go-street" class="btn-glam" onclick="showScreen('screen-street')">Sokağa Çık</button>
         </section>
 
-        <!-- 3. Shopping Street (Moda Sokağı) -->
+
+        <!-- 2.5 Moda Sokağı (Street View) -->
+        <section id="screen-street" class="screen">
+            <h2 class="glam-title">Moda Sokağı</h2>
+            <div class="header-bar glass-header">
+                <div class="budget-display">💳 <span id="street-budget">1000</span> TL</div>
+            </div>
+
+            <div class="street-container">
+                <div class="building b-home" onclick="goToBuilding('Ev')">
+                    <div class="b-icon">🏠</div>
+                    <div class="b-name">Ev (Hazırlık)</div>
+                </div>
+                <div class="building b-clothes" onclick="goToBuilding('Kıyafet Dükkanı')">
+                    <div class="b-icon">👗</div>
+                    <div class="b-name">Kıyafet Dükkanı</div>
+                </div>
+                <div class="building b-acc" onclick="goToBuilding('Aksesuarcı')">
+                    <div class="b-icon">💎</div>
+                    <div class="b-name">Aksesuarcı</div>
+                </div>
+                <div class="building b-hair" onclick="goToBuilding('Kuaför')">
+                    <div class="b-icon">✂️</div>
+                    <div class="b-name">Kuaför</div>
+                </div>
+                <div class="building b-shoes" onclick="goToBuilding('Ayakkabıcı')">
+                    <div class="b-icon">👠</div>
+                    <div class="b-name">Ayakkabıcı</div>
+                </div>
+                <div class="building b-podium" onclick="goToBuilding('Yarışma Salonu')">
+                    <div class="b-icon">🌟</div>
+                    <div class="b-name">Yarışma Salonu</div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 3. Specific Shop -->
         <section id="screen-shop" class="screen">
             <div class="header-bar glass-header">
-                <h2 class="glam-title small">Boutique</h2>
+                <h2 class="glam-title small" id="shop-title">Dükkan</h2>
                 <div class="budget-display">💳 <span id="shop-budget">1000</span> TL</div>
             </div>
-            
-            <div class="category-filters" id="shop-categories">
-                <!-- Categories will be generated here -->
+
+            <div class="category-filters" id="shop-categories" style="display:none;">
+                <!-- Categories hidden now, mapped by building -->
             </div>
 
             <!-- Shop Items Grid (Visual Focus) -->
@@ -70,22 +106,25 @@
             </div>
 
             <div class="bottom-actions">
-                <button id="btn-go-wardrobe" class="btn-secondary">Giyinme Odası</button>
+                <button onclick="showScreen('screen-street')" class="btn-secondary">Sokağa Dön</button>
             </div>
         </section>
 
-        <!-- 4. Wardrobe Screen -->
+        <!-- 4. Wardrobe Screen (Ev) -->
         <section id="screen-wardrobe" class="screen">
             <div class="header-bar glass-header">
-                <h2 class="glam-title small">Giyinme Odası</h2>
+                <h2 class="glam-title small">Ev (Hazırlık)</h2>
             </div>
-            
+
             <div class="wardrobe-layout">
                 <div class="character-display" id="wardrobe-character-container">
                     <!-- SVG injected via JS -->
                 </div>
-                
+
                 <div class="inventory-section">
+                    <div class="category-filters" id="inventory-categories">
+                        <!-- Wardrobe compartments will be generated here -->
+                    </div>
                     <div class="inventory-grid" id="inventory-items">
                         <!-- Bought items will appear here -->
                     </div>
@@ -93,8 +132,8 @@
             </div>
 
             <div class="bottom-actions">
-                <button id="btn-back-shop" class="btn-secondary">Geri Dön</button>
-                <button id="btn-go-podium" class="btn-glam pulse-anim">PODYUMA ÇIK!</button>
+                <button onclick="showScreen('screen-street')" class="btn-secondary">Sokağa Dön</button>
+                <button id="btn-go-podium" class="btn-glam pulse-anim" style="display: none;">PODYUMA ÇIK!</button>
             </div>
         </section>
 
@@ -103,7 +142,7 @@
             <div class="podium-header">
                 <span class="theme-tag" id="podium-theme-display">...</span>
             </div>
-            
+
             <div class="podium-container" id="podium-contestants">
                 <!-- Player and Bots will be displayed here side by side -->
             </div>
@@ -118,7 +157,7 @@
         <!-- 6. Results Screen -->
         <section id="screen-results" class="screen">
             <h2 class="glam-title">Kazanan</h2>
-            
+
             <div class="winner-showcase" id="winner-announcement">
                 <!-- Winner info and big character display -->
             </div>
